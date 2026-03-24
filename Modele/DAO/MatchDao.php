@@ -23,7 +23,7 @@
                     $row['Heure'],
                     $row['Nom_Equipe_Adverse'],
                     $row['Lieu'],
-                    $row['Resultat'] ?? '',
+                    $orw['Resultat'] ?? '',
                     $row['Score_Adversaire'] ?? '',
                     $row['Score_Nous'] ?? ''
                 );

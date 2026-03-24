@@ -18,7 +18,6 @@ try {
             'Heure' => $match->getHeure(),
             'Nom_Equipe_Adverse' => $match->getNomEquipeAdverse(),
             'Lieu' => $match->getLieu(),
-            'Resultat' => $match->getResultat(),
             'Score_Adversaire' => $match->getScoreAdversaire(),
             'Score_Nous' => $match->getScoreNous()
         ];

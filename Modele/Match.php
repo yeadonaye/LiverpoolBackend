@@ -43,16 +43,16 @@
             return $this->lieu;
         }
 
-        public function getResultat(): string{
-            return $this->resultat;
-        }
-
         public function getScoreAdversaire(): int{
             return $this->score_adversaire;
         }
 
         public function getScoreNous(): int{
             return $this->score_nous;
+        }
+
+        public function getResultat(): string{
+            return $this->resultat;
         }
 
         //Setters
@@ -72,16 +72,16 @@
             $this->lieu = $lieu;
         }
 
-        public function setResultat(string $resultat): void{
-            $this->resultat = $resultat;
-        }
-
         public function setScoreAdversaire(int $score_adversaire): void{
             $this->score_adversaire = $score_adversaire;
         }
 
         public function setScoreNous(int $score_nous): void{
             $this->score_nous = $score_nous;
+        }
+
+        public function setResultat(string $resultat): void{
+            $this->resultat = $resultat;
         }
     }
 ?>

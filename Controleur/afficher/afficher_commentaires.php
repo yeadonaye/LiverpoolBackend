@@ -1,10 +1,10 @@
 <?php
-require_once __DIR__ . '/../../Modele/DAO/auth.php';
+require_once __DIR__ . '/../../Modele/DAO/jwt_utils.php';
 require_once __DIR__ . '/../../Modele/DAO/CommentaireDao.php';
 require_once __DIR__ . '/../../Modele/DAO/JoueurDao.php';
 require_once __DIR__ . '/../../Modele/Commentaire.php';
 require_once __DIR__ . '/../../Modele/Joueur.php';
-requireAuth();
+requireAuthJWT();
 
 $pdo = getDBConnection();
 $commentaireDao = new CommentaireDao($pdo);

@@ -1,24 +1,14 @@
 <?php
 // auth.php lives in Modele/DAO
-require_once __DIR__ . '/../Modele/DAO/auth.php';
-
-if (isAuthenticated()) {
+require_once __DIR__ . '/../Modele/DAO/authapi.php';
+/*
+if (is_jwt_valid($jwt, $secret)) {
     header('Location: /index.php');
     exit;
 }
+*/
 
-$error = '';
-$redirect = $_GET['redirect'] ?? '/index.php';
+$error = seConnecter();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $identifiant = $_POST['identifiant'] ?? '';
-    $password = $_POST['password'] ?? '';
-    
-    if (authenticate($identifiant, $password)) {
-        header('Location: ' . $redirect);
-        exit;
-    } else {
-        $error = 'Identifiant ou mot de passe incorrect!';
-    }
-}
+
 ?>
