@@ -11,8 +11,8 @@ jobs:
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
-              server: ftp-tonom.alwaysdata.net  # Mets ton vrai hôte ici
-              username: ton_user_alwaysdata     # Mets ton vrai user ici
-              password: ton_password            # Mets ton vrai pass ici
+              server: ftp-yeadonaye.alwaysdata.net  # Mets ton vrai hôte ici
+              username: yeadonaye     # Mets ton vrai user ici
+              password: admin@gestionFoot            # Mets ton vrai pass ici
               protocol: ftps
               timeout: 60000
