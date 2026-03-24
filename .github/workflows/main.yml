@@ -11,11 +11,8 @@ jobs:
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
-        # Vérifie bien que ces noms correspondent exactement à tes Secrets GitHub
-        server: ${{ secrets.FTP_SERVER }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        protocol: ftps
-        timeout: 60000
-        # C'est l'option équivalente pour supprimer les fichiers obsolètes sur le serveur
-        dangerous-clean-slate: false
+              server: ftp-tonom.alwaysdata.net  # Mets ton vrai hôte ici
+              username: ton_user_alwaysdata     # Mets ton vrai user ici
+              password: ton_password            # Mets ton vrai pass ici
+              protocol: ftps
+              timeout: 60000
