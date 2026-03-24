@@ -1,28 +1,24 @@
-name: Deploy to Alwaysdata
-
-on:
-  push:
-    branches:
-      - main
-
+on: push
+name: 🚀 Deploy website on push
 jobs:
-
-  deploy-api:
-    if: github.ref == 'refs/heads/main'
+  web-deploy:
+    name: 🎉 Deploy
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v4
 
-      - name: Deploy to APIs to AlwaysData (yeadonaye.alwaysdata.net)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ftp-apiliverpool.alwaysdata.net
-          username: ${{ secrets.BACKENDLIVERPOOL_AD_USER }}
-          password: ${{ secrets.BACKENDLIVERPOOL_AD_PASSWORD }}
-          protocol: ftps
-          port: 21
-          local-dir: ./
-          server-dir: /www/
-          security: loose
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        # Force le protocole FTPS (Port 21 + TLS) pour Alwaysdata
+        protocol: ftps
+        # Augmente le timeout pour éviter les coupures brutales (ECONNRESET)
+        timeout: 60000
+        # Supprime les fichiers sur le serveur qui ne sont plus dans le dépôt
+        delete-clean: true
+        # Optionnel : si le problème persiste, décommente la ligne suivante
+        # port: 21
