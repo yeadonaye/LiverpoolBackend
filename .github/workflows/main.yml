@@ -11,14 +11,11 @@ jobs:
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
+        # Vérifie bien que ces noms correspondent exactement à tes Secrets GitHub
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        # Force le protocole FTPS (Port 21 + TLS) pour Alwaysdata
         protocol: ftps
-        # Augmente le timeout pour éviter les coupures brutales (ECONNRESET)
         timeout: 60000
-        # Supprime les fichiers sur le serveur qui ne sont plus dans le dépôt
-        delete-clean: true
-        # Optionnel : si le problème persiste, décommente la ligne suivante
-        # port: 21
+        # C'est l'option équivalente pour supprimer les fichiers obsolètes sur le serveur
+        dangerous-clean-slate: false
