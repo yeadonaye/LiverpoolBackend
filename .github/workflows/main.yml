@@ -12,7 +12,7 @@ jobs:
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
               server: ftp-yeadonaye.alwaysdata.net  # Mets ton vrai hôte ici
-              username: yeadonaye     # Mets ton vrai user ici
-              password: admin@gestionFoot            # Mets ton vrai pass ici
+              username: ${{ secrets.BACKENDLIVERPOOL_AD_USER }}     # Mets ton vrai user ici
+              password: ${{ secrets.BACKENDLIVERPOOL_AD_PASSWORD }}            # Mets ton vrai pass ici
               protocol: ftps
               timeout: 60000
