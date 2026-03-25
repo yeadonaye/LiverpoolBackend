@@ -4,7 +4,6 @@ require_once __DIR__ . '/../../Modele/DAO/JoueurDao.php';
 require_once __DIR__ . '/../../Modele/DAO/MatchDao.php';
 require_once __DIR__ . '/../../Modele/Joueur.php';
 require_once __DIR__ . '/../../Modele/Match.php';
-requireAuth();
 
 $pdo = getDBConnection();
 $joueurDao = new JoueurDao($pdo);
