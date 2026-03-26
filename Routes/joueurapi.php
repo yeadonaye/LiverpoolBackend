@@ -55,7 +55,7 @@ switch ($http_method){
             }
 
 
-            require_once '../ajouter/ajouter_joueur.php';
+            require_once '../Controleur/ajouter/ajouter_joueur.php';
 
             if (!empty($error)) {
                 deliver_response(400, "Bad Request", $error);
