@@ -5,7 +5,6 @@ require_once __DIR__ . '/../../Modele/Joueur.php';
 require_once __DIR__ . '/../../Modele/Match.php';
 require_once __DIR__ . '/../../Modele/DAO/connexionBD.php';
 
-
 $joueurDao = new JoueurDao($linkpdo);
 $matchDao = new MatchDao($linkpdo);
 
