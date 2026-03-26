@@ -1,10 +1,7 @@
 <?php
-require_once __DIR__ . '/../../Modele/DAO/auth.php';
-require_once __DIR__ . '/../../Modele/DAO/JoueurDao.php';
-require_once __DIR__ . '/../../Modele/Joueur.php';
-requireAuth();
+require_once '../../Modele/DAO/JoueurDao.php';
+require_once '../../Modele/Joueur.php';
 
-$pdo = getDBConnection();
 $joueurDao = new JoueurDao($pdo);
 $joueur = []; // Initialize as empty array for template compatibility
 $statuts = ['Actif', 'Blessé', 'Suspendue', 'Absent'];
