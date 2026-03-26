@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Basic required fields
     if (empty($numLicence) || empty($nom) || empty($prenom) || empty($statut)) {
-        $error = 'Le numéro de licence, le nom, le prénom et le statut sont obligatoires, ' . $numLicence.$nom.$prenom.$statut;
+        $error = $nom;
     } else {
         // Validate taille if provided
         if (!$error && $taille !== '') {
