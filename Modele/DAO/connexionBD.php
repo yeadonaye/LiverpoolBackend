@@ -6,13 +6,13 @@
 // Default values can be overridden using environment variables
 // Environment variables for production:
 // BD_TYPE, BD_HOST, BD_PORT, BD_NAME, BD_USER, BD_PASS, BD_CHARSET
-define('DB_TYPE', getenv('DB_TYPE') ?: 'mysql');                 
-define('DB_HOST', getenv('DB_HOST') ?: 'mysql-yeadonaye.alwaysdata.net');           
-define('DB_PORT', (int)(getenv('DB_PORT') ?: 3306));            
-define('DB_NAME', getenv('DB_NAME') ?: 'yeadonaye_bd_gestion_equipe');      
-define('DB_USER', getenv('DB_USER') ?: 'yeadonaye');                 
-define('DB_PASS', getenv('DB_PASS') ?: 'admin@gestionFoot');                   
-define('DB_CHARSET', getenv('DB_CHARSET') ?: 'utf8mb4');
+define('BD_TYPE', getenv('BD_TYPE') ?: 'mysql');                 
+define('BD_HOST', getenv('BD_HOST') ?: 'mysql-yeadonaye.alwaysdata.net');           
+define('BD_PORT', (int)(getenv('BD_PORT') ?: 3306));            
+define('BD_NAME', getenv('BD_NAME') ?: 'yeadonaye_bd_gestion_equipe');      
+define('BD_USER', getenv('BD_USER') ?: 'yeadonaye');                 
+define('BD_PASS', getenv('BD_PASS') ?: 'admin@gestionFoot');                   
+define('BD_CHARSET', getenv('BD_CHARSET') ?: 'utf8mb4');
 
 
 // ======================================================
