@@ -2,8 +2,9 @@
 
 require_once __DIR__ . '/../../Modele/DAO/JoueurDao.php' ;
 require_once __DIR__ . '/../../Modele/Joueur.php';
+require_once __DIR__ . '/../../Modele/DAO/connexionBD.php';
 
-$joueurDao = new JoueurDao($pdo);
+$joueurDao = new JoueurDao($linkpdo);
 $joueur = []; // Initialize as empty array for template compatibility
 $statuts = ['Actif', 'Blessé', 'Suspendue', 'Absent'];
 $error = '';
