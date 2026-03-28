@@ -74,7 +74,7 @@ switch ($http_method){
             exit();
         }
 
-        require_once '../modifier/modifier_joueur.php';
+        require_once '../Controleur/modifier/modifier_joueur.php';
 
         if (!empty($error)) {
             deliver_response(400, "Bad Request", $error);
