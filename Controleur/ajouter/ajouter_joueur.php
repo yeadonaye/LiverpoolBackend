@@ -158,8 +158,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     );
                     $joueurDao->add($joueurObj);
                     // Redirection automatique vers la liste des joueurs
-                    //header('Location: /Vue/Afficher/liste_joueurs.php');
-                    //exit;
+                    header('Location: liverpool.alwaysdata.net/Vue/Afficher/liste_joueurs.php');
+                    exit;
                 }
             } catch (Exception $e) {
                 $error = 'Erreur lors de l\'enregistrement: ' . $e->getMessage();
