@@ -1,6 +1,7 @@
 <?php
 
 require_once 'jwt_utils.php';
+require_once '../DAO/MatchDao.php';
 
 $secret = "secret_key"; // Clé secrète pour la validation du token
 $headers = getallheaders();
