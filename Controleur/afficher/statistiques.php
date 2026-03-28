@@ -1,10 +1,10 @@
 <?php
-require_once __DIR__ . '/../../Modele/DAO/auth.php';
+
 require_once __DIR__ . '/../../Modele/DAO/JoueurDao.php';
 require_once __DIR__ . '/../../Modele/DAO/MatchDao.php';
-requireAuth();
 
-$pdo = getDBConnection();
+
+$pdo = $linkpdo;
 $joueurDao = new JoueurDao($pdo);
 $matchDao = new MatchDao($pdo);
 

@@ -1,9 +1,10 @@
 <?php
-require_once __DIR__ . '/../../Modele/DAO/auth.php';
-require_once __DIR__ . '/../../Modele/DAO/MatchDao.php';
-requireAuth();
 
-$pdo = getDBConnection();
+require_once __DIR__ . '/../../Modele/DAO/MatchDao.php';
+require_once __DIR__ . "/../../Modele/DAO/connexionBD.php";
+
+
+$pdo = $linkpdo;
 $matchDao = new MatchDao($pdo);
 $matchs = [];
 $error = '';

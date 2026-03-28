@@ -1,9 +1,10 @@
 <?php
-require_once __DIR__ . '/../../Modele/DAO/auth.php';
-require_once __DIR__ . '/../../Modele/DAO/JoueurDao.php';
-requireAuth();
 
-$pdo = getDBConnection();
+require_once __DIR__ . '/../../Modele/DAO/JoueurDao.php';
+require_once __DIR__ . "/../../Modele/DAO/connexionBD.php";
+
+
+$pdo = $linkpdo;
 $joueurDao = new JoueurDao($pdo);
 $id = $_GET['id'] ?? null;
 

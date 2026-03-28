@@ -1,10 +1,11 @@
 <?php
-require_once __DIR__ . '/../../Modele/DAO/auth.php';
+
 require_once __DIR__ . '/../../Modele/DAO/CommentaireDao.php';
 require_once __DIR__ . '/../../Modele/Commentaire.php';
-requireAuth();
+require_once __DIR__ . "/../../Modele/DAO/connexionBD.php";
 
-$pdo = getDBConnection();
+
+$pdo = $linkpdo;
 $commentaireDao = new CommentaireDao($pdo);
 
 $error = '';

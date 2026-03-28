@@ -4,9 +4,10 @@ require_once __DIR__ . '/../../Modele/DAO/CommentaireDao.php';
 require_once __DIR__ . '/../../Modele/DAO/JoueurDao.php';
 require_once __DIR__ . '/../../Modele/Commentaire.php';
 require_once __DIR__ . '/../../Modele/Joueur.php';
+require_once __DIR__ . "/../../Modele/DAO/connexionBD.php";
 requireAuthJWT();
 
-$pdo = getDBConnection();
+$pdo = $linkpdo;
 $commentaireDao = new CommentaireDao($pdo);
 $joueurDao = new JoueurDao($pdo);
 
