@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../../Modele/DAO/JoueurDao.php';
-require_once __DIR__ . "/../../Modele/DAO/connexionBD.php"
+require_once __DIR__ . "/../../Modele/DAO/connexionBD.php";
 
 
 $pdo = $linkpdo;
