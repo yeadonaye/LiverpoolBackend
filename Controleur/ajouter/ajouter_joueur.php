@@ -45,6 +45,7 @@ if ($id) {
         $error = 'Erreur lors du chargement du joueur';
     }
 }
+#get
 
 require_once "../../Routes/joueurapi.php";
 
