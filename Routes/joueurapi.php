@@ -32,7 +32,7 @@ switch ($http_method){
         check_coach($jwt, $secret); // Vérifie que l'utilisateur est un coach
 
 
-        require_once '../afficher/afficher_joueur.php';
+        require_once '../Controleur/afficher/afficher_joueur.php';
         if (!empty($error)){
             deliver_response(500, "Internal Server Error", "Erreur lors de la récupération des joueurs.");
         }else{
