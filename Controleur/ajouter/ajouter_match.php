@@ -74,3 +74,5 @@ if (empty($nomEquipeAdverse) || empty($dateRencontre) || empty($heure)) {
     }
 }
 ?>
+
+#foot
