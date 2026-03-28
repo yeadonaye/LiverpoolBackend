@@ -1,13 +1,12 @@
 <?php
-require_once __DIR__ . '/../../Modele/DAO/auth.php';
 require_once __DIR__ . '/../../Modele/DAO/JoueurDao.php';
 require_once __DIR__ . '/../../Modele/DAO/MatchDao.php';
 require_once __DIR__ . '/../../Modele/Joueur.php';
 require_once __DIR__ . '/../../Modele/Match.php';
+require_once __DIR__ . '/../../Modele/DAO/connexionBD.php';
 
-$pdo = getDBConnection();
-$joueurDao = new JoueurDao($pdo);
-$matchDao = new MatchDao($pdo);
+$joueurDao = new JoueurDao($linkpdo);
+$matchDao = new MatchDao($linkpdo);
 
 $playerCount = 0;
 $injuredCount = 0;
