@@ -53,15 +53,13 @@ if (isset($_GET['success'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nomEquipeAdverse = $_POST['nomEquipeAdverse'] ?? '';
-    $dateRencontre = $_POST['dateRencontre'] ?? '';
-    $heure = $_POST['heure'] ?? '';
-    $lieu = $_POST['lieu'] ?? '';
-    $scoreNous = $_POST['scoreNous'] ?? '';
-    $scoreAdverse = $_POST['scoreAdverse'] ?? '';
-    // Les scores par défaut à 0 si laissés vides
-    $scoreNousInt = ($scoreNous === '' ? 0 : (int)$scoreNous);
-    $scoreAdverseInt = ($scoreAdverse === '' ? 0 : (int)$scoreAdverse);
+    $nomEquipeAdverse = $data->Nom_Equipe_Adverse ?? '';
+    $dateRencontre    = $data->Date_Rencontre ?? '';
+    $heure            = $data->Heure ?? '';
+    $lieu             = $data->Lieu ?? '';
+    $resultat         = $data->Resultat ?? '';
+    $scoreNous        = $data->Score_Nous ?? 0;
+    $scoreAdverse     = $data->Score_Adversaire ?? 0;
 
     if (empty($nomEquipeAdverse) || empty($dateRencontre) || empty($heure)) {
         $error = 'Les champs avec * sont obligatoires';
@@ -94,6 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $heure,
                     $nomEquipeAdverse,
                     $lieu,
+                    $resultat,
                     $scoreAdverseInt,
                     $scoreNousInt
                 );
@@ -109,6 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $heure,
                     $nomEquipeAdverse,
                     $lieu,
+                    $resultat,
                     $scoreAdverseInt,
                     $scoreNousInt
                 );
