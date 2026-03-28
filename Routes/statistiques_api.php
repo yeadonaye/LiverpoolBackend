@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__ . 'jwt_utils.php';
-require_once __DIR__ . '../Modele/DAO/JoueurDao.php';
-require_once __DIR__ . '../Modele/DAO/MatchDao.php';
-require_once __DIR__ . '../Modele/DAO/connexionBD.php';
+require_once 'jwt_utils.php';
+require_once '../Modele/DAO/JoueurDao.php';
+require_once '../Modele/DAO/MatchDao.php';
+require_once '../Modele/DAO/connexionBD.php';
 
 header('Content-Type: application/json');
 
