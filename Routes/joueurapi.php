@@ -8,21 +8,7 @@ $headers = getallheaders();
 //Récupération du token
 $jwt = isset($headers['Authorization']) ? str_replace('Bearer ', '', $headers['Authorization']) : null;
 
-//Verification auth
-function check_auth($jwt, $secret) {
-    if (!is_jwt_valid($jwt, $secret)) {
-        deliver_response(401, "Unauthorized", "Votre token n'est pas valide ou a expiré.");
-        exit();
-    }
-}
-
-// Vérification rôle coach
-function check_coach($jwt, $secret) {
-    if (!is_coach($jwt, $secret)) {
-        deliver_response(403, "Forbidden", "Vous n'avez pas les permissions nécessaires pour accéder à cette ressource.");
-        exit();
-    }
-}
+// Les méthodes is_coach() et is_joueur() se trouvent mtn dans le fichier jwt_utils.php parce qu'on les utilisé ailleurs
 
 $http_method = $_SERVER['REQUEST_METHOD'];
 
@@ -122,6 +108,10 @@ switch ($http_method){
             exit();
         }
         break;
+
+    default:
+        deliver_response(405, "Method Not Allowed", "Méthode HTTP non autorisée.");
+        exit();
 }
 
 ?>

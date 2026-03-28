@@ -116,4 +116,28 @@
 		return isset($payload['role']) && $payload['role'] === 'joueur';
 	}
 
+	//Verification auth
+	function check_auth($jwt, $secret) {
+		if (!is_jwt_valid($jwt, $secret)) {
+			deliver_response(401, "Unauthorized", "Votre token n'est pas valide ou a expiré.");
+			exit();
+		}
+	}
+
+	// Vérification rôle coach
+	function check_coach($jwt, $secret) {
+		if (!is_coach($jwt, $secret)) {
+			deliver_response(403, "Forbidden", "Vous n'avez pas les permissions nécessaires pour accéder à cette ressource.");
+			exit();
+		}
+	}
+
+	// Vérification rôle joueur
+	function check_joueur($jwt, $secret) {
+		if (!is_joueur($jwt, $secret)) {
+			deliver_response(403, "Forbidden", "Vous n'avez pas les permissions nécessaires pour accéder à cette ressource.");
+			exit();
+		}
+	}
+
 ?>
