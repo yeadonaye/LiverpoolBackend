@@ -11,7 +11,7 @@ $headers = getallheaders();
 $jwt = isset($headers['Authorization']) ? str_replace('Bearer ', '', $headers['Authorization']) : null;
 
 // Les méthodes is_coach() et is_joueur() se trouvent mtn dans le fichier jwt_utils.php parce qu'on les utilisé ailleurs
-$joueurDao = new JoueurDao($linkpdo)
+$joueurDao = new JoueurDao($linkpdo);
 
 $http_method = $_SERVER['REQUEST_METHOD'];
 
