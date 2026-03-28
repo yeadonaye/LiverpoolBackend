@@ -58,8 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $heure            = $data->Heure ?? '';
     $lieu             = $data->Lieu ?? '';
     $resultat         = $data->Resultat ?? '';
-    $scoreNous        = $data->Score_Nous ?? 0;
-    $scoreAdverse     = $data->Score_Adversaire ?? 0;
+    $scoreNousInt     = $data->Score_Nous ?? 0;
+    $scoreAdverseInt  = $data->Score_Adversaire ?? 0;
 
     if (empty($nomEquipeAdverse) || empty($dateRencontre) || empty($heure)) {
         $error = 'Les champs avec * sont obligatoires';
@@ -98,8 +98,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 );
                 $matchDao->update($matchObj);
                 // Redirect to reload fresh data from DB (Post-Redirect-Get)
-                header('Location: /Vue/Ajouter/ajouter_match.php?id=' . $id . '&success=modified');
-                exit;
+                $success = 'Match modifié avec succès!';
+                exit();
             } else {
                 // Ajout
                 $matchObj = new Match_(
@@ -114,8 +114,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 );
                 $matchDao->add($matchObj);
                 // Redirection automatique vers la liste des matchs
-                header('Location: /Vue/Afficher/afficher_match.php');
-                exit;
+                $success = 'Match ajouté avec succès!';
+                exit();
             }
         } catch (Exception $e) {
             $error = 'Erreur lors de l\'enregistrement: ' . $e->getMessage();
