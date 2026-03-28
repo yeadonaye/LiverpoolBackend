@@ -5,8 +5,8 @@ require_once __DIR__ . '/../../Modele/Joueur.php';
 require_once __DIR__ . "/../../Modele/DAO/connexionBD.php";
 
 
-$pdo = $linkpdo;
-$joueurDao = new JoueurDao($pdo);
+
+$joueurDao = new JoueurDao($linkpdo);
 $joueur = [];
 $statuts = ['Actif', 'Blessé', 'Suspendue', 'Absent'];
 $error = '';
@@ -22,14 +22,14 @@ if (!$id) {
         if ($joueurObj) {
             // Convert object to array for template
             $joueur = [
-                'Id_Joueur' => $joueurObj->getIdJoueur(),
-                'Num_Licence' => $joueurObj->getNumLicence(),
-                'Nom' => $joueurObj->getNom(),
-                'Prenom' => $joueurObj->getPrenom(),
-                'Date_Naissance' => $joueurObj->getDateNaissance(),
-                'Taille' => $joueurObj->getTaille(),
-                'Poids' => $joueurObj->getPoids(),
-                'Statut' => $joueurObj->getStatut()
+                'Id_Joueur' => $data->getIdJoueur(),
+                'Num_Licence' => $data->getNumLicence(),
+                'Nom' => $data->getNom(),
+                'Prenom' => $data->getPrenom(),
+                'Date_Naissance' => $data->getDateNaissance(),
+                'Taille' => $data->getTaille(),
+                'Poids' => $data->getPoids(),
+                'Statut' => $data->getStatut()
             ];
         } else {
             $error = 'Joueur non trouvé';
