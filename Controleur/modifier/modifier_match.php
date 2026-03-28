@@ -16,12 +16,12 @@ if (!$id) {
         if (!$matchObj) {
             $error = 'Match non trouvé';
         } else {
-            $nomEquipeAdverse = $data->nomEquipeAdverse ?? '';
-            $dateRencontre    = $data->dateRencontre ?? '';
-            $heure            = $data->heure ?? '';
-            $lieu             = $data->lieu ?? '';
-            $scoreNous        = $data->scoreNous ?? '';
-            $scoreAdverse     = $data->scoreAdverse ?? '';
+            $nomEquipeAdverse = $data->Nom_Equipe_Adverse ?? '';
+            $dateRencontre    = $data->Date_Rencontre ?? '';
+            $heure            = $data->Heure ?? '';
+            $lieu             = $data->Lieu ?? '';
+            $scoreNous        = $data->Score_Nous ?? '';
+            $scoreAdverse     = $data->Score_Adversaire ?? '';
 
             if (empty($nomEquipeAdverse) || empty($dateRencontre) || empty($heure)) {
                 $error = 'Les champs avec * sont obligatoires';
