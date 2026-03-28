@@ -3,148 +3,74 @@
 require_once __DIR__ . '/../../Modele/DAO/MatchDao.php';
 require_once __DIR__ . '/../../Modele/Match.php';
 require_once __DIR__ . "/../../Modele/DAO/connexionBD.php";
- 
 
-$pdo = $linkpdo;
-$matchDao = new MatchDao($pdo);
-$match = null;
+$matchDao = new MatchDao($linkpdo);
 $error = '';
 $success = '';
 
-// Helpers
-$toFrDate = static function (?string $date) {
-    if (!$date) return '';
-    $d = DateTime::createFromFormat('Y-m-d', $date);
-    return $d ? $d->format('d/m/Y') : $date;
-};
+// 🔹 Récupération des données JSON
+$nomEquipeAdverse = $data->Nom_Equipe_Adverse ?? '';
+$dateRencontre    = $data->Date_Rencontre ?? '';
+$heure            = $data->Heure ?? '';
+$lieu             = $data->Lieu ?? '';
+$scoreNous        = $data->Score_Nous ?? '';
+$scoreAdverse     = $data->Score_Adversaire ?? '';
 
-$toDbDate = static function (?string $dateFr) {
-    if (!$dateFr) return null;
-    $d = DateTime::createFromFormat('d/m/Y', $dateFr);
-    return $d ? $d->format('Y-m-d') : null;
-};
+// 🔹 Validation
+if (empty($nomEquipeAdverse) || empty($dateRencontre) || empty($heure)) {
+    $error = 'Les champs avec * sont obligatoires';
+} else {
 
-$normalizeTime = static function (?string $time) {
-    if (!$time) return '';
-    // Accept HH:MM or HH:MM:SS from DB, return HH:MM
-    if (preg_match('/^(\d{2}:\d{2})/', $time, $m)) {
-        return $m[1];
-    }
-    return $time;
-};
-
-$id = $_GET['id'] ?? null;
-
-if ($id) {
-    try {
-        $match = $matchDao->getById((int)$id);
-    } catch (Exception $e) {
-        $error = 'Erreur lors du chargement du match';
-    }
-}
-
-// Show success message after redirect (Post-Redirect-Get)
-if (isset($_GET['success'])) {
-    if ($_GET['success'] === 'modified') {
-        $success = 'Match modifié avec succès!';
-    } elseif ($_GET['success'] === 'created') {
-        $success = 'Match ajouté avec succès!';
-    }
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nomEquipeAdverse = $data->Nom_Equipe_Adverse ?? '';
-    $dateRencontre    = $data->Date_Rencontre ?? '';
-    $heure            = $data->Heure ?? '';
-    $lieu             = $data->Lieu ?? '';
-    $resultat         = $data->Resultat ?? '';
-    $scoreNous        = $data->Score_Nous ?? 0;
-    $scoreAdverse     = $data->Score_Adversaire ?? 0;
-
-    if (empty($nomEquipeAdverse) || empty($dateRencontre) || empty($heure)) {
-        $error = 'Les champs avec * sont obligatoires';
+    // Format date attendu : YYYY-MM-DD
+    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $dateRencontre)) {
+        $error = 'Date invalide (format attendu : YYYY-MM-DD)';
     }
 
-    // Validate date format dd/mm/yyyy
-    $dateSql = $toDbDate($dateRencontre);
-    if (!$error && !$dateSql) {
-        $error = 'Date invalide (format jj/mm/aaaa)';
-    }
-
-    // Validate 24h time HH:MM
+    // Format heure HH:MM
     if (!$error && !preg_match('/^(?:[01]\d|2[0-3]):[0-5]\d$/', $heure)) {
         $error = 'Heure invalide (format 24h HH:MM)';
     }
 
+    // Validation scores
+    if (!$error && $scoreNous !== '' && (!is_numeric($scoreNous) || $scoreNous < 0)) {
+        $error = 'Score nous invalide';
+    }
+
+    if (!$error && $scoreAdverse !== '' && (!is_numeric($scoreAdverse) || $scoreAdverse < 0)) {
+        $error = 'Score adverse invalide';
+    }
+
+    // 🔹 Ajout
     if (!$error) {
         try {
-            // Créer le résultat au format "3-2" si les scores sont fournis
+
+            $scoreNousInt = ($scoreNous !== '') ? (int)$scoreNous : 0;
+            $scoreAdverseInt = ($scoreAdverse !== '') ? (int)$scoreAdverse : 0;
+
+            // Résultat format "X-Y"
             $resultat = '';
             if ($scoreNous !== '' && $scoreAdverse !== '') {
                 $resultat = $scoreNousInt . '-' . $scoreAdverseInt;
             }
 
-            if ($id) {
-                // Modification
-                $matchObj = new Match_(
-                    (int)$id,
-                    $dateSql,
-                    $heure,
-                    $nomEquipeAdverse,
-                    $lieu,
-                    $resultat,
-                    $scoreAdverseInt,
-                    $scoreNousInt
-                );
-                $matchDao->update($matchObj);
-                // Redirect to reload fresh data from DB (Post-Redirect-Get)
-                header('Location: /Vue/Ajouter/ajouter_match.php?id=' . $id . '&success=modified');
-                exit;
-            } else {
-                // Ajout
-                $matchObj = new Match_(
-                    0,
-                    $dateSql,
-                    $heure,
-                    $nomEquipeAdverse,
-                    $lieu,
-                    $resultat,
-                    $scoreAdverseInt,
-                    $scoreNousInt
-                );
-                $matchDao->add($matchObj);
-                // Redirection automatique vers la liste des matchs
-                header('Location: /Vue/Afficher/afficher_match.php');
-                exit;
-            }
+            $matchObj = new Match_(
+                0,
+                $dateRencontre,
+                $heure,
+                $nomEquipeAdverse,
+                $lieu,
+                $resultat,
+                $scoreAdverseInt,
+                $scoreNousInt
+            );
+
+            $matchDao->add($matchObj);
+
+            $success = 'Match ajouté avec succès!';
+
         } catch (Exception $e) {
             $error = 'Erreur lors de l\'enregistrement: ' . $e->getMessage();
         }
     }
-}
-
-// For template display - convert object to array if needed
-$match_display = null;
-if ($match) {
-    $match_display = [
-        'Id_Match' => $match->getIdMatch(),
-        'Nom_Equipe_Adverse' => $match->getNomEquipeAdverse(),
-        'Date_Rencontre' => $toFrDate($match->getDateRencontre()),
-        'Heure' => $normalizeTime($match->getHeure()),
-        'Lieu' => $match->getLieu(),
-        'Score_Adversaire' => $match->getScoreAdversaire(),
-        'Score_Nous' => $match->getScoreNous()
-    ];
-} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Keep user input on validation errors
-    $match_display = [
-        'Id_Match' => $id,
-        'Nom_Equipe_Adverse' => $nomEquipeAdverse ?? '',
-        'Date_Rencontre' => $dateRencontre ?? '',
-        'Heure' => $heure ?? '',
-        'Lieu' => $lieu ?? '',
-        'Score_Adversaire' => $scoreAdverse,
-        'Score_Nous' => $scoreNous
-    ];
 }
 ?>
