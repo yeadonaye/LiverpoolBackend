@@ -20,6 +20,7 @@ if (!$id) {
             $dateRencontre    = $data->Date_Rencontre ?? '';
             $heure            = $data->Heure ?? '';
             $lieu             = $data->Lieu ?? '';
+            $resultat         = $data->Resultat ?? '';
             $scoreNous        = $data->Score_Nous ?? '';
             $scoreAdverse     = $data->Score_Adversaire ?? '';
 
