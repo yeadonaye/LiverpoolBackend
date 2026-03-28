@@ -46,15 +46,17 @@ if ($id) {
     }
 }
 
+require_once "../../Routes/joueurapi.php";
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $numLicence = $_POST['numLicence'] ?? '';
-    $nom = $_POST['nom'] ?? '';
-    $prenom = $_POST['prenom'] ?? '';
-    $dateNaissance = $_POST['dateNaissance'] ?? '';
-    $taille = $_POST['taille'] ?? '';
-    $poids = $_POST['poids'] ?? '';
-    $statut = $_POST['statut'] ?? '';
+    $numLicence = $data->numLicence ?? '';
+    $nom = $data->nom ?? '';
+    $prenom = $data->prenom ?? '';
+    $dateNaissance = $data->dateNaissance ?? '';
+    $taille = $data->taille ?? '';
+    $poids = $data->poids ?? '';
+    $statut = $data->statut ?? '';
 
     // Basic required fields
     if (empty($numLicence) || empty($nom) || empty($prenom) || empty($statut)) {
