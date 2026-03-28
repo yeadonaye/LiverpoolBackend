@@ -58,8 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $heure            = $data->Heure ?? '';
     $lieu             = $data->Lieu ?? '';
     $resultat         = $data->Resultat ?? '';
-    $scoreNousInt        = $data->Score_Nous ?? 0;
-    $scoreAdverseInt     = $data->Score_Adversaire ?? 0;
+    $scoreNous        = $data->Score_Nous ?? 0;
+    $scoreAdverse     = $data->Score_Adversaire ?? 0;
 
     if (empty($nomEquipeAdverse) || empty($dateRencontre) || empty($heure)) {
         $error = 'Les champs avec * sont obligatoires';
