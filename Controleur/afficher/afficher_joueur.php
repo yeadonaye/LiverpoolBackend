@@ -1,7 +1,7 @@
 <?php
 #require_once __DIR__ . '../../Modele/DAO/auth.php';
 require_once __DIR__ . '/../../Modele/DAO/JoueurDao.php';
-requireAuth();
+#requireAuth();
 
 $pdo = getDBConnection();
 $joueurDao = new JoueurDao($pdo);
