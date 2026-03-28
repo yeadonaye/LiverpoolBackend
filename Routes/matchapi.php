@@ -2,6 +2,7 @@
 
 require_once 'jwt_utils.php';
 require_once '../Modele/DAO/MatchDao.php';
+require_once '../Modele/DAO/connexionBD.php';
 
 $secret = "secret_key"; // Clé secrète pour la validation du token
 $headers = getallheaders();
@@ -9,6 +10,7 @@ $headers = getallheaders();
 //Récupération du token
 $jwt = isset($headers['Authorization']) ? str_replace('Bearer ', '', $headers['Authorization']) : null;
 
+$matchDao = new MatchDao($linkpdo);
 
 $http_method = $_SERVER['REQUEST_METHOD'];
 
