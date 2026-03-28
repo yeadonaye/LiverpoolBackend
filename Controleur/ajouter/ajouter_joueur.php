@@ -46,7 +46,8 @@ if ($id) {
     }
 }
 
-require_once "../../Routes/joueurapi.php";
+
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -157,7 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     );
                     $joueurDao->add($joueurObj);
                     // Redirection automatique vers la liste des joueurs
-                    header('Location: /Vue/Afficher/liste_joueurs.php');
+                    header('Location: liverpool.alwaysdata.net/Vue/Afficher/liste_joueurs.php');
                     exit;
                 }
             } catch (Exception $e) {
