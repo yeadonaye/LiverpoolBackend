@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../Modele/DAO/auth.php';
+#require_once __DIR__ . '../../Modele/DAO/auth.php';
 require_once __DIR__ . '/../../Modele/DAO/JoueurDao.php';
 requireAuth();
 
