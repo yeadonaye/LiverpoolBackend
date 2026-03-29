@@ -1,115 +1,115 @@
 <?php
 
 require_once 'jwt_utils.php';
+require_once '../Modele/DAO/ParticiperDao.php';
+require_once '../Modele/DAO/connexionBD.php';
 
-$secret = "secret_key"; // Clé secrète pour la validation du token
+header('Content-Type: application/json');
+
+$secret = "secret_key";
 $headers = getallheaders();
-
-//Récupération du token
 $jwt = isset($headers['Authorization']) ? str_replace('Bearer ', '', $headers['Authorization']) : null;
+
+check_auth($jwt, $secret);
+check_coach($jwt, $secret);
+
+$participerDao = new ParticiperDao($linkpdo);
 
 $http_method = $_SERVER['REQUEST_METHOD'];
 
-switch ($http_method){
-    case 'GET': // GET pour afficher une feuille de match
-        check_auth($jwt, $secret); // Vérifie que le token est valide
-        check_coach($jwt, $secret); // Vérifie que l'utilisateur est un coach
+switch ($http_method) {
 
+    case 'GET':
+        $matchId = $_GET['matchId'] ?? null;
 
-        require_once '../Controleur/afficher/afficher_feuille_de_match.php';
-        if (!empty($error)){
-            deliver_response(500, "Internal Server Error", "Erreur lors de la récupération des feuilles de match.");
-        } else {
-            deliver_response(200, "OK", $participations);
-        }
-
-        break;
-
-    
-    case 'POST': // POST pour ajouter une feuille de match
-        check_auth($jwt, $secret); // Vérifie que le token est valide
-        check_coach($jwt, $secret); // Vérifie que l'utilisateur est un coach
-
-        $data = json_decode(file_get_contents("php://input"));
-
-        // Vérifier que data n'est pas null
-        if(!$data){
-            deliver_response(400, "Bad Request", "JSON Invalide ou manquant.");
-            exit();
-        }
-
-        require_once '../Controleur/ajouter/saisie_feuille_de_match.php';
-
-        if (!empty($error)) {
-            deliver_response(400, "Bad Request", $error);
-        } elseif (!empty($success)) {
-            deliver_response(201, "Created", $success);
-        } else {
-            deliver_response(500, "Internal Server Error", "Erreur inconnue lors de l'ajout de la feuille de match.");
-        }
-    
-        break;
-
-
-    case 'PUT': // PUT pour mettre à jour une feuille de match
-        check_auth($jwt, $secret); // Vérifie que le token est valide
-        check_coach($jwt, $secret);
-
-        $id = $_GET['id'] ?? null;
-        if (!$id) {
-            deliver_response(400, "Bad Request", "L'ID de la feuille de match est requis pour la mise à jour.");
-            exit();
-        }
-
-        $data = json_decode(file_get_contents("php://input"));
-        if (!$data) {
-            deliver_response(400, "Bad Request", "JSON invalide ou manquant.");
-            exit();
-        }
-
-        require_once '../modifier/modifier_feuille_de_match.php';
-
-        if (!empty($error)) {
-            deliver_response(400, "Bad Request", $error);
-        } elseif (!empty($success)) {
-            deliver_response(200, "OK", $success);
-        } else {
-            deliver_response(500, "Internal Server Error", "Erreur inconnue lors de la mise à jour de la feuille de match.");
-        }
-
-    break;
-
-
-    case 'DELETE': // DELETE pour supprimer une feuille de match
-        check_auth($jwt, $secret);
-        check_coach($jwt, $secret);
-
-        $id = $_GET['id'] ?? null;
-        if (!$id) {
-            deliver_response(400, "Bad Request", "L'ID de la feuille de match est requis pour la suppression.");
+        if (!$matchId) {
+            deliver_response(400, "Bad Request", "matchId requis.");
             exit();
         }
 
         try {
-            $feuille = $feuilleDao->getById((int)$id);
-            if (!$feuille) {
-                deliver_response(404, "Not Found", "Feuille de match introuvable.");
-                exit();
-            }
-
-            $feuilleDao->delete($feuille);
-
-            deliver_response(200, "OK", "Feuille de match supprimée.");
+            $participations = $participerDao->obtenirParMatch((int)$matchId);
+            deliver_response(200, "OK", $participations);
         } catch (Exception $e) {
-            deliver_response(500, "Internal Server Error", "Erreur lors de la suppression: " . $e->getMessage());
+            deliver_response(500, "Internal Server Error", $e->getMessage());
+        }
+        break;
+
+    case 'POST':
+    case 'PUT': // same logic for update
+
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if (!$data) {
+            deliver_response(400, "Bad Request", "JSON invalide.");
             exit();
         }
-    break;
 
-    
+        $matchId = $data['matchId'] ?? null;
+        $titulaires = $data['titulaires'] ?? [];
+        $remplacants = $data['remplacants'] ?? [];
+
+        if (!$matchId || count($titulaires) < 11) {
+            deliver_response(400, "Bad Request", "matchId et au moins 11 titulaires requis.");
+            exit();
+        }
+
+        try {
+            // reset (this is why PUT makes sense)
+            $participerDao->supprimerParMatch((int)$matchId);
+
+            // titulaires
+            foreach ($titulaires as $joueur) {
+                $participerDao->ajouterParticipation(
+                    $joueur['id'],
+                    $matchId,
+                    $joueur['poste'],
+                    true,
+                    $joueur['note'] ?? null
+                );
+            }
+
+            // remplacants
+            foreach ($remplacants as $joueur) {
+                $participerDao->ajouterParticipation(
+                    $joueur['id'],
+                    $matchId,
+                    $joueur['poste'],
+                    false,
+                    $joueur['note'] ?? null
+                );
+            }
+
+            deliver_response(
+                $http_method === 'POST' ? 201 : 200,
+                "OK",
+                "Feuille de match sauvegardée."
+            );
+
+        } catch (Exception $e) {
+            deliver_response(500, "Internal Server Error", $e->getMessage());
+        }
+
+        break;
+
+    case 'DELETE':
+
+        $matchId = $_GET['matchId'] ?? null;
+
+        if (!$matchId) {
+            deliver_response(400, "Bad Request", "matchId requis.");
+            exit();
+        }
+
+        try {
+            $participerDao->supprimerParMatch((int)$matchId);
+            deliver_response(200, "OK", "Feuille supprimée.");
+        } catch (Exception $e) {
+            deliver_response(500, "Internal Server Error", $e->getMessage());
+        }
+
+        break;
+
     default:
-        deliver_response(405, "Method Not Allowed", "Méthode HTTP non autorisée.");
-        exit();
+        deliver_response(405, "Method Not Allowed", "Méthode non autorisée.");
 }
-
-?>
