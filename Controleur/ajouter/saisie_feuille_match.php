@@ -14,18 +14,18 @@ $participerDao = new ParticiperDao($pdo);
 $error = '';
 $success = '';
 
-// ✅ DATA COMES FROM API (NOT $_POST)
+// DATA COMES FROM API (NOT $_POST) donc on recup du JSON
 if (!isset($data)) {
     $error = "Aucune donnée reçue.";
     return;
 }
 
-// 🔹 Récupération des données JSON
+// Récupération des données JSON
 $matchId = $data['matchId'] ?? null;
 $titulaires = $data['titulaires'] ?? [];
 $remplacants = $data['remplacants'] ?? [];
 
-// 🔹 Validation
+// Validation
 if (!$matchId) {
     $error = "matchId est requis.";
     return;
@@ -44,10 +44,10 @@ try {
         return;
     }
 
-    // 🔥 Reset (logique PUT-like)
+    // Reset (logique PUT-like)
     $participerDao->supprimerParMatch((int)$matchId);
 
-    // 🔹 Ajouter titulaires
+    // Ajouter titulaires
     foreach ($titulaires as $joueur) {
 
         if (!isset($joueur['id'], $joueur['poste'])) {
@@ -63,7 +63,7 @@ try {
         );
     }
 
-    // 🔹 Ajouter remplaçants
+    // Ajouter remplaçants
     foreach ($remplacants as $joueur) {
 
         if (!isset($joueur['id'], $joueur['poste'])) {
