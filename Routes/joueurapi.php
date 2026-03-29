@@ -21,12 +21,25 @@ switch ($http_method){
         check_coach($jwt, $secret); // Vérifie que l'utilisateur est un coach
 
 
+    $id = $_GET['id'] ?? null;
+
+    if ($id) {
+        // Charger un joueur spécifique
+        require_once '../Controleur/modifier/modifier_joueur.php';
+        if (!empty($error)) {
+            deliver_response(404, "Not Found", $error);
+        } else {
+            deliver_response(200, "OK", $success);
+        }
+    } else {
+        // Lister tous les joueurs
         require_once '../Controleur/afficher/afficher_joueur.php';
-        if (!empty($error)){
+        if (!empty($error)) {
             deliver_response(500, "Internal Server Error", "Erreur lors de la récupération des joueurs.");
-        }else{
+        } else {
             deliver_response(200, "OK", $joueurs);
         }
+    }
 
         break;
     
