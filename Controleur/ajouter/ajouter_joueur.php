@@ -10,16 +10,16 @@ $success = '';
 
 $statuts = ['Actif', 'Blessé', 'Suspendue', 'Absent'];
 
-// 🔹 Récupération des données JSON
-$numLicence = $data->numLicence ?? '';
-$nom = $data->nom ?? '';
-$prenom = $data->prenom ?? '';
-$dateNaissance = $data->dateNaissance ?? '';
-$taille = $data->taille ?? '';
-$poids = $data->poids ?? '';
-$statut = $data->statut ?? '';
+// Récupération des données JSON
+$numLicence    = $data->Num_Licence    ?? '';
+$nom           = $data->Nom           ?? '';
+$prenom        = $data->Prenom        ?? '';
+$dateNaissance = $data->Date_Naissance ?? '';
+$taille        = $data->Taille        ?? '';
+$poids         = $data->Poids         ?? '';
+$statut        = $data->Statut        ?? '';
 
-// 🔹 Validation
+// Validation
 if (empty($numLicence) || empty($nom) || empty($prenom) || empty($statut)) {
     $error = 'Le numéro de licence, le nom, le prénom et le statut sont obligatoires';
 } else {
