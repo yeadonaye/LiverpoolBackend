@@ -16,15 +16,27 @@ $http_method = $_SERVER['REQUEST_METHOD'];
 
 switch ($http_method){
     case 'GET': // GET pour afficher la liste des matchs
-        check_auth($jwt, $secret); // Vérifie que le token est valide
-        check_coach($jwt, $secret); // Vérifie que l'utilisateur est un coach
+        check_auth($jwt, $secret);
+        check_coach($jwt, $secret);
 
+        $id = $_GET['id'] ?? null;
 
-        require_once '../Controleur/afficher/afficher_match.php';
-        if (!empty($error)){
-            deliver_response(500, "Internal Server Error", "Erreur lors de la récupération des matchs.");
-        }else{
-            deliver_response(200, "OK", $matchs);
+        if ($id) {
+            // Charger un match spécifique pour pré-remplir le formulaire
+            require_once '../Controleur/modifier/modifier_match.php';
+            if (!empty($error)) {
+                deliver_response(404, "Not Found", $error);
+            } else {
+                deliver_response(200, "OK", $success);
+            }
+        } else {
+            // Lister tous les matchs
+            require_once '../Controleur/afficher/afficher_match.php';
+            if (!empty($error)) {
+                deliver_response(500, "Internal Server Error", "Erreur lors de la récupération des matchs.");
+            } else {
+                deliver_response(200, "OK", $matchs);
+            }
         }
 
         break;
