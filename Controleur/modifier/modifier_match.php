@@ -49,9 +49,7 @@ if (!$id) {
                         $scoreNousInt    = ($scoreNous    !== '') ? (int)$scoreNous    : 0;
                         $scoreAdverseInt = ($scoreAdverse !== '') ? (int)$scoreAdverse : 0;
 
-                        if ($scoreNous !== '' && $scoreAdverse !== '') {
-                            $resultat = $scoreNousInt . '-' . $scoreAdverseInt;
-                        }
+                        $resultat = $data->Resultat ?? '';
 
                         $matchObj = new Match_(
                             (int)$id,
