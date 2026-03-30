@@ -8,8 +8,6 @@ $joueurDao = new JoueurDao($linkpdo);
 $error = '';
 $success = '';
 
-$statuts = ['Actif', 'Blessé', 'Suspendue', 'Absent'];
-
 // Récupération des données JSON
 $numLicence    = $data->Num_Licence    ?? '';
 $nom           = $data->Nom           ?? '';
