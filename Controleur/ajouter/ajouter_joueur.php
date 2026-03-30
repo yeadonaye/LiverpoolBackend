@@ -7,6 +7,7 @@ require_once __DIR__ . '/../../Modele/DAO/connexionBD.php';
 $joueurDao = new JoueurDao($linkpdo);
 $error = '';
 $success = '';
+$statuts = ['Actif', 'Blessé', 'Suspendu', 'Absent'];
 
 // Récupération des données JSON
 $numLicence    = $data->Num_Licence    ?? '';
