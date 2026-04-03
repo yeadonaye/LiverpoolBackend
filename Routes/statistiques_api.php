@@ -10,11 +10,15 @@ $secret = "secret_key";
 $headers = getallheaders();
 $jwt = isset($headers['Authorization']) ? str_replace('Bearer ', '', $headers['Authorization']) : null;
 
-// Check auth and coach role
-check_auth($jwt, $secret);
-check_coach($jwt, $secret);
 
-// Only allow GET
+check_auth($jwt, $secret); // Vérifier que le token est valide
+// Seul les utilisateurs caoch, ou joueur peuvent accéder aux statistiques
+if (!is_coach($jwt, $secret) && !is_joueur($jwt, $secret)) {
+    deliver_response(403, "Forbidden", "Vous n'avez pas les permissions nécessaires pour accéder à ces statistiques.");
+    exit();
+}
+
+// Permettre que la recupération (GET) de données et non pas l'ajout(POST) ou la modification(PUT)
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     http_response_code(405);
     echo json_encode([

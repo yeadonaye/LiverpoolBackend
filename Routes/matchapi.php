@@ -16,22 +16,33 @@ $http_method = $_SERVER['REQUEST_METHOD'];
 
 switch ($http_method){
     case 'GET': // GET pour afficher la liste des matchs
-        check_auth($jwt, $secret);
-        check_coach($jwt, $secret);
 
         $id = $_GET['id'] ?? null;
 
-        if ($id) {
+        if ($id) { 
+            /**
+             * Si on rajoute un id, on suppose que c'est pour récupérer les détails d'un match spécifique
+             * donc c'est pour pré-remplir le formulaire de modification.
+             * Donc seul les coachs peuvent y accéder.
+             */
+            check_auth($jwt, $secret); // Vérifie que le token est valide
+            check_coach($jwt, $secret);// Vérifie que l'utilisateur est un coach
+
             // Charger un match spécifique pour pré-remplir le formulaire
             require_once '../Controleur/modifier/modifier_match.php';
+
             if (!empty($error)) {
                 deliver_response(404, "Not Found", $error);
             } else {
                 deliver_response(200, "OK", $success);
             }
         } else {
+            /**
+             * N'importe qui peut accéder à la liste des matchs, (même un personne non connectée)
+             */
             // Lister tous les matchs
             require_once '../Controleur/afficher/afficher_match.php';
+
             if (!empty($error)) {
                 deliver_response(500, "Internal Server Error", "Erreur lors de la récupération des matchs.");
             } else {
@@ -44,7 +55,6 @@ switch ($http_method){
     case 'POST': // POST pour ajouter un match
         check_auth($jwt, $secret); // Vérifie que le token est valide
         check_coach($jwt, $secret); // Vérifie que l'utilisateur est un coach
-
 
         $data = json_decode(file_get_contents("php://input"));
 
