@@ -46,6 +46,9 @@ if (!$id) {
                 if (empty($numLicence) || empty($nom) || empty($prenom) || empty($statut)) {
                     $error = 'Le numéro de licence, le nom, le prénom et le statut sont obligatoires';
                 } else {
+                    if (isset($taille)) {
+                        $taille = str_replace(',', '.', $taille);
+                    }
                     if ($taille !== '' && (!is_numeric($taille) || (float)$taille <= 0 || (float)$taille > 3)) {
                         $error = 'La taille doit être un nombre entre 0 et 3 mètres.';
                     }
