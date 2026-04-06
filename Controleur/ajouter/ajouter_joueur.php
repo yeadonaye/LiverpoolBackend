@@ -23,6 +23,14 @@ if (empty($numLicence) || empty($nom) || empty($prenom) || empty($statut)) {
     $error = 'Le numéro de licence, le nom, le prénom et le statut sont obligatoires';
 } else {
 
+        // Convert comma to dot for numbers
+    if (isset($taille)) {
+        $taille = str_replace(',', '.', $taille);
+    }
+    if (isset($poids)) {
+        $poids = str_replace(',', '.', $poids);
+    }
+
     if ($taille !== '' && (!is_numeric($taille) || (float)$taille <= 0 || (float)$taille > 3)) {
         $error = 'La taille doit être un nombre entre 0 et 3 mètres.';
     }
@@ -35,8 +43,12 @@ if (empty($numLicence) || empty($nom) || empty($prenom) || empty($statut)) {
         $error = 'Le statut sélectionné est invalide.';
     }
 
-    if (!$error && !preg_match('/^[0-9A-Za-z\-]+$/', $numLicence)) {
-        $error = 'Le numéro de licence doit contenir uniquement des chiffres, lettres et tirets.';
+    if (!$error && !preg_match('/^\d+$/', $numLicence)) {
+        $error = 'Le numéro de licence doit contenir uniquement des chiffres.';
+    }
+
+    if (!$error && strlen($numLicence) > 4) {
+        $error = 'Le numéro de licence doit contenir au maximum 4 caractères.';
     }
 
     // 🔹 Vérification unicité licence
@@ -57,7 +69,7 @@ if (empty($numLicence) || empty($nom) || empty($prenom) || empty($statut)) {
 
             $joueurObj = new Joueur(
                 0, // auto ID
-                (int)$numLicence,
+                $numLicence,
                 $nom,
                 $prenom,
                 $dateNaissance,
