@@ -4,7 +4,6 @@ require_once 'jwt_utils.php';
 require_once '../Modele/DAO/MatchDao.php';
 require_once '../Modele/DAO/connexionBD.php';
 
-$secret = "secret_key"; // Clé secrète pour la validation du token
 $headers = getallheaders();
 
 //Récupération du token
@@ -25,8 +24,8 @@ switch ($http_method){
              * donc c'est pour pré-remplir le formulaire de modification.
              * Donc seul les coachs peuvent y accéder.
              */
-            check_auth($jwt, $secret); // Vérifie que le token est valide
-            check_coach($jwt, $secret);// Vérifie que l'utilisateur est un coach
+            check_auth($jwt); // Vérifie que le token est valide
+            check_coach($jwt);// Vérifie que l'utilisateur est un coach
 
             // Charger un match spécifique pour pré-remplir le formulaire
             require_once '../Controleur/modifier/modifier_match.php';
@@ -53,8 +52,8 @@ switch ($http_method){
         break;
     
     case 'POST': // POST pour ajouter un match
-        check_auth($jwt, $secret); // Vérifie que le token est valide
-        check_coach($jwt, $secret); // Vérifie que l'utilisateur est un coach
+        check_auth($jwt); // Vérifie que le token est valide
+        check_coach($jwt); // Vérifie que l'utilisateur est un coach
 
         $data = json_decode(file_get_contents("php://input"));
 
@@ -79,8 +78,8 @@ switch ($http_method){
 
 
     case 'PUT': // PUT pour mettre à jour un match
-        check_auth($jwt, $secret);
-        check_coach($jwt, $secret);
+        check_auth($jwt);
+        check_coach($jwt);
 
         $id = $_GET['id'] ?? null;
         if (!$id) {
@@ -107,8 +106,8 @@ switch ($http_method){
     break;
 
     case 'DELETE': // DELETE pour supprimer un match
-        check_auth($jwt, $secret);
-        check_coach($jwt, $secret);
+        check_auth($jwt);
+        check_coach($jwt);
 
         $id = $_GET['id'] ?? null;
         if (!$id) {

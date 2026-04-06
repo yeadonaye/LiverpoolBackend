@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . "/../Commentaire.php";
+require_once __DIR__ . '/../../Routes/jwt_utils.php';
 require_once "ModeleDao.php";
 
 class CommentaireDao implements ModeleDao {

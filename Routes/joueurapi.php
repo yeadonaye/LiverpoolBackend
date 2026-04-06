@@ -4,7 +4,6 @@ require_once 'jwt_utils.php';
 require_once '../Modele/DAO/JoueurDao.php';
 require_once '../Modele/DAO/connexionBD.php';
 
-$secret = "secret_key"; // Clé secrète pour la validation du token
 $headers = getallheaders();
 
 //Récupération du token
@@ -17,8 +16,8 @@ $http_method = $_SERVER['REQUEST_METHOD'];
 
 switch ($http_method){
     case 'GET': // GET pour afficher la liste des joueurs
-        check_auth($jwt, $secret); // Vérifie que le token est valide
-        check_coach($jwt, $secret); // Vérifie que l'utilisateur est un coach
+        check_auth($jwt); // Vérifie que le token est valide
+        check_coach($jwt); // Vérifie que l'utilisateur est un coach
 
 
     $id = $_GET['id'] ?? null;
@@ -44,8 +43,8 @@ switch ($http_method){
         break;
     
     case 'POST': // POST pour ajouter un joueur
-        check_auth($jwt, $secret); // Vérifie que le token est valide
-        check_coach($jwt, $secret); // Vérifie que l'utilisateur est un coach
+        check_auth($jwt); // Vérifie que le token est valide
+        check_coach($jwt); // Vérifie que l'utilisateur est un coach
 
 
             $data = json_decode(file_get_contents("php://input"));
@@ -72,8 +71,8 @@ switch ($http_method){
 
 
     case 'PUT': // PUT pour mettre à jour un joueur
-        check_auth($jwt, $secret);
-        check_coach($jwt, $secret);
+        check_auth($jwt);
+        check_coach($jwt);
 
         $id = $_GET['id'] ?? null;
         if (!$id) {
@@ -100,8 +99,8 @@ switch ($http_method){
     break;
 
     case 'DELETE': // DELETE pour supprimer un joueur
-        check_auth($jwt, $secret);
-        check_coach($jwt, $secret);
+        check_auth($jwt);
+        check_coach($jwt);
 
         $id = $_GET['id'] ?? null;
         if (!$id) {

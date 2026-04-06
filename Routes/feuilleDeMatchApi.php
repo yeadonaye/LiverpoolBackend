@@ -6,12 +6,11 @@ require_once '../Modele/DAO/connexionBD.php';
 
 header('Content-Type: application/json');
 
-$secret = "secret_key";
 $headers = getallheaders();
 $jwt = isset($headers['Authorization']) ? str_replace('Bearer ', '', $headers['Authorization']) : null;
 
-check_auth($jwt, $secret);
-check_coach($jwt, $secret);
+check_auth($jwt);
+check_coach($jwt);
 
 $participerDao = new ParticiperDao($linkpdo);
 

@@ -6,14 +6,14 @@ require_once '../Modele/DAO/connexionBD.php';
 
 header('Content-Type: application/json');
 
-$secret = "secret_key";
 $headers = getallheaders();
 $jwt = isset($headers['Authorization']) ? str_replace('Bearer ', '', $headers['Authorization']) : null;
 
 
-check_auth($jwt, $secret); // Vérifier que le token est valide
-// Seul les utilisateurs caoch, ou joueur peuvent accéder aux statistiques
-if (!is_coach($jwt, $secret) && !is_joueur($jwt, $secret)) {
+// Vérifier le token via l'API d'auth et récupérer le rôle
+$payload = check_auth($jwt);
+// Seuls les coachs et joueurs peuvent accéder aux statistiques
+if (!in_array($payload['role'] ?? '', ['coach', 'joueur'])) {
     deliver_response(403, "Forbidden", "Vous n'avez pas les permissions nécessaires pour accéder à ces statistiques.");
     exit();
 }
