@@ -4,7 +4,6 @@ require_once __DIR__ . '/../../Modele/DAO/CommentaireDao.php';
 require_once __DIR__ . '/../../Modele/Commentaire.php';
 require_once __DIR__ . "/../../Modele/DAO/connexionBD.php";
 
-
 $pdo = $linkpdo;
 $commentaireDao = new CommentaireDao($pdo);
 
@@ -24,6 +23,11 @@ try {
         header('Location: /Vue/Afficher/liste_joueurs.php');
         exit;
     }
+
+    // Format date for display in the form as jj/mm/yyyy
+    $dateObj = DateTime::createFromFormat('Y-m-d', substr($comment->getDate(), 0, 10));
+    $commentDateFormatted = $dateObj ? $dateObj->format('d/m/Y') : substr($comment->getDate(), 0, 10);
+
 } catch (Exception $e) {
     $error = "Erreur lors du chargement du commentaire";
 }
@@ -36,12 +40,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Le commentaire est obligatoire';
     }
 
-    // Utiliser uniquement la date (sans heure) au format jj/mm/aaaa. Si vide, conserver la valeur actuelle ou la date du jour.
+    // Default: current comment date or today
     $dateForDb = $comment ? substr($comment->getDate(), 0, 10) : date('Y-m-d');
+
     if ($dateInput !== '') {
-        $dt = DateTime::createFromFormat('d/m/Y', $dateInput) ?: DateTime::createFromFormat('Y-m-d', $dateInput);
+        // Parse input strictly as jj/mm/yyyy
+        $dt = DateTime::createFromFormat('d/m/Y', $dateInput);
         if ($dt) {
-            $dateForDb = $dt->format('Y-m-d');
+            $dateForDb = $dt->format('Y-m-d'); // store in DB as Y-m-d
         } else {
             $error = 'Date de commentaire invalide (format jj/mm/aaaa)';
         }
@@ -59,3 +65,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+?>

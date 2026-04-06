@@ -29,11 +29,27 @@ try {
         exit;
     }
 
-    $commentaires = $commentaireDao->getByJoueur($joueurId);
-    // Trier du plus récent au plus ancien si possible (date_ DESC)
+    $commentairesObjects = $commentaireDao->getByJoueur($joueurId);
+
+    // Convert Commentaire objects to arrays with formatted date (jj/mm/yyyy)
+    foreach ($commentairesObjects as $commentaire) {
+        $dateObj = DateTime::createFromFormat('Y-m-d', $commentaire->getDate());
+        $formattedDate = $dateObj ? $dateObj->format('d/m/Y') : $commentaire->getDate();
+
+        $commentaires[] = [
+            'Id_Commentaire' => $commentaire->getIdCommentaire(),
+            'Description' => $commentaire->getDescription(),
+            'Date' => $formattedDate, // formatted here
+            'Id_Joueur' => $commentaire->getIdJoueur()
+        ];
+    }
+
+    // Optional: sort from most recent to oldest
     usort($commentaires, function($a, $b) {
-        return strcmp($b->getDate(), $a->getDate());
+        return strcmp($b['Date'], $a['Date']);
     });
+
 } catch (Exception $e) {
     $error = "Erreur lors du chargement des commentaires";
 }
+?>
