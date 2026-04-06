@@ -33,8 +33,13 @@ try {
 
     // Convert Commentaire objects to arrays with formatted date (jj/mm/yyyy)
     foreach ($commentairesObjects as $commentaire) {
-        $dateObj = DateTime::createFromFormat('Y-m-d', $commentaire->getDate());
-        $formattedDate = $dateObj ? $dateObj->format('d/m/Y') : $commentaire->getDate();
+        $rawDate = substr($commentaire->getDate(), 0, 10);
+        if ($rawDate && $rawDate !== '0000-00-00') {
+            $dateObj = DateTime::createFromFormat('Y-m-d', $rawDate);
+            $formattedDate = $dateObj ? $dateObj->format('d/m/Y') : '';
+        } else {
+            $formattedDate = ''; // or date('d/m/Y') if you want today
+        }
 
         $commentaires[] = [
             'Id_Commentaire' => $commentaire->getIdCommentaire(),
