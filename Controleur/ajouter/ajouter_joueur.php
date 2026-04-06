@@ -43,8 +43,8 @@ if (empty($numLicence) || empty($nom) || empty($prenom) || empty($statut)) {
         $error = 'Le statut sélectionné est invalide.';
     }
 
-    if (!$error && !preg_match('/^[0-9A-Za-z\-]+$/', $numLicence)) {
-        $error = 'Le numéro de licence doit contenir uniquement des chiffres, lettres et tirets.';
+    if (!$error && !preg_match('/^\d+$/', $numLicence)) {
+        $error = 'Le numéro de licence doit contenir uniquement des chiffres.';
     }
 
     if (!$error && strlen($numLicence) > 4) {
