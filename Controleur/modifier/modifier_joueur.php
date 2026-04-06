@@ -64,6 +64,9 @@ if (!$id) {
                             $error = 'Ce numéro de licence est déjà utilisé par un autre joueur.';
                         }
                     }
+                    if (!$error && strlen($numLicence) > 4) {
+                        $error = 'Le numéro de licence doit contenir au maximum 4 caractères.';
+                    }
                     if (!$error) {
                         $joueurObj = new Joueur(
                             (int)$id,
