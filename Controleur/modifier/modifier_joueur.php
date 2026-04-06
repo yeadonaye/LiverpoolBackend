@@ -70,7 +70,7 @@ if (!$id) {
                     if (!$error) {
                         $joueurObj = new Joueur(
                             (int)$id,
-                            (int)$numLicence,
+                            $numLicence,
                             $nom,
                             $prenom,
                             $dateNaissance,

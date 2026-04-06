@@ -46,7 +46,7 @@ if (empty($numLicence) || empty($nom) || empty($prenom) || empty($statut)) {
     if (!$error && !preg_match('/^[0-9A-Za-z\-]+$/', $numLicence)) {
         $error = 'Le numéro de licence doit contenir uniquement des chiffres, lettres et tirets.';
     }
-    
+
     if (!$error && strlen($numLicence) > 4) {
         $error = 'Le numéro de licence doit contenir au maximum 4 caractères.';
     }
@@ -69,7 +69,7 @@ if (empty($numLicence) || empty($nom) || empty($prenom) || empty($statut)) {
 
             $joueurObj = new Joueur(
                 0, // auto ID
-                (int)$numLicence,
+                $numLicence,
                 $nom,
                 $prenom,
                 $dateNaissance,
