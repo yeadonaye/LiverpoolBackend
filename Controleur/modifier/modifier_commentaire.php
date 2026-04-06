@@ -25,8 +25,13 @@ try {
     }
 
     // Format date for display in the form as jj/mm/yyyy
-    $dateObj = DateTime::createFromFormat('Y-m-d', substr($comment->getDate(), 0, 10));
-    $commentDateFormatted = $dateObj ? $dateObj->format('d/m/Y') : substr($comment->getDate(), 0, 10);
+    $rawDate = substr($comment->getDate(), 0, 10);
+    if ($rawDate && $rawDate !== '0000-00-00') {
+        $dateObj = DateTime::createFromFormat('Y-m-d', $rawDate);
+        $commentDateFormatted = $dateObj ? $dateObj->format('d/m/Y') : '';
+    } else {
+        $commentDateFormatted = ''; // or date('d/m/Y') if you want today
+    }
 
 } catch (Exception $e) {
     $error = "Erreur lors du chargement du commentaire";
