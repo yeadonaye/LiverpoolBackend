@@ -16,8 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     $dateRencontre    = $data->Date_Rencontre     ?? '';
     $heure            = $data->Heure              ?? '';
     $lieu             = $data->Lieu               ?? '';
-    $scoreNous        = $data->Score_Nous         ?? '';
-    $scoreAdverse     = $data->Score_Adversaire   ?? '';
+    $scoreNous        = isset($data->Score_Nous) && $data->Score_Nous !== null ? $data->Score_Nous : '';
+    $scoreAdverse     = isset($data->Score_Adversaire) && $data->Score_Adversaire !== null ? $data->Score_Adversaire : '';
 
     if (empty($nomEquipeAdverse) || empty($dateRencontre) || empty($heure)) {
         $error = 'Les champs avec * sont obligatoires';
@@ -41,8 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
         if (!$error) {
             try {
-                $scoreNousInt    = ($scoreNous    !== '') ? (int)$scoreNous    : 0;
-                $scoreAdverseInt = ($scoreAdverse !== '') ? (int)$scoreAdverse : 0;
+                $scoreNousInt    = ($scoreNous    !== '') ? (int)$scoreNous    : null;
+                $scoreAdverseInt = ($scoreAdverse !== '') ? (int)$scoreAdverse : null;
 
                 $resultat = '';
                 if ($scoreNous !== '' && $scoreAdverse !== '') {

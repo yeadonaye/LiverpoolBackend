@@ -35,8 +35,9 @@ CREATE TABLE `Match_` (
     Heure TIME,
     Nom_Equipe_Adverse VARCHAR(50),
     Lieu VARCHAR(50),
+    Resultat VARCHAR(20),
     Score_Adversaire INT,
-    Score_Nous INT,,
+    Score_Nous INT,
     PRIMARY KEY(Id_Match)
 );
 
