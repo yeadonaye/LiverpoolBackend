@@ -17,10 +17,10 @@ class ParticiperDao implements ModeleDao {
         $participations = [];
         foreach ($rows as $r) {
             $participations[] = new Participer(
-                $r["idParticipation"],
-                $r["poste"],
-                $r["note"],
-                (bool)$r["titulaireOuPas"]
+                $r["Id_participation"],
+                $r["Poste"],
+                $r["Note"],
+                (bool)$r["Titulaire_ou_pas"]
             );
         }
 
@@ -28,7 +28,7 @@ class ParticiperDao implements ModeleDao {
     }
 
     public function getById(int $id): ?Participer{
-        $stmt = $this->pdo->prepare("SELECT * FROM Participer WHERE idParticipation = :id");
+        $stmt = $this->pdo->prepare("SELECT * FROM Participer WHERE Id_participation = :id");
         $stmt->execute([':id' => $id]);
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -38,17 +38,17 @@ class ParticiperDao implements ModeleDao {
         }
 
             return new Participer(
-            $row["idParticipation"],
-            $row["poste"],
-            $row["note"],
-            (bool)$row["titulaireOuPas"]
+            $row["Id_participation"],
+            $row["Poste"],
+            $row["Note"],
+            (bool)$row["Titulaire_ou_pas"]
         );
     }
 
     public function add(object $obj): bool {
         if (!($obj instanceof Participer)) return false;
 
-        $sql = "INSERT INTO Participer (poste, note, titulaireOuPas)
+        $sql = "INSERT INTO Participer (Poste, Note, Titulaire_ou_pas)
                 VALUES (:poste, :note, :titulaire)";
 
             return $this->pdo->prepare($sql)->execute([
@@ -62,10 +62,10 @@ class ParticiperDao implements ModeleDao {
         if (!($obj instanceof Participer)) return false;
 
         $sql = "UPDATE Participer
-                SET poste = :poste,
-                    note = :note,
-                    titulaireOuPas = :titulaire
-                WHERE idParticipation = :id";
+                SET Poste = :poste,
+                    Note = :note,
+                    Titulaire_ou_pas = :titulaire
+                WHERE Id_participation = :id";
 
             return $this->pdo->prepare($sql)->execute([
             ':poste'     => $obj->getPoste(),
@@ -77,7 +77,7 @@ class ParticiperDao implements ModeleDao {
 
     public function delete(object $obj): bool {
         if (!($obj instanceof Participer)) return false;
-        $sql = "DELETE FROM Participer WHERE idParticipation = :id";
+        $sql = "DELETE FROM Participer WHERE Id_participation = :id";
             return $this->pdo->prepare($sql)->execute([':id' => $obj->getIdParticipation()]);
     }
 
