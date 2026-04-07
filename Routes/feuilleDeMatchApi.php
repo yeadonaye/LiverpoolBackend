@@ -4,21 +4,27 @@ require_once 'jwt_utils.php';
 require_once '../Modele/DAO/ParticiperDao.php';
 require_once '../Modele/DAO/connexionBD.php';
 
+// Définition du type de réponse JSON
 header('Content-Type: application/json');
 
+// Récupération du JWT depuis le header Authorization
 $headers = getallheaders();
 $jwt = isset($headers['Authorization']) ? str_replace('Bearer ', '', $headers['Authorization']) : null;
 
+// Vérification de l'authentification et des droits coach
 check_auth($jwt);
 check_coach($jwt);
 
+// DAO pour gérer les participations des joueurs aux matchs
 $participerDao = new ParticiperDao($linkpdo);
 
+// Détermination de la méthode HTTP utilisée
 $http_method = $_SERVER['REQUEST_METHOD'];
 
 switch ($http_method) {
 
     case 'GET':
+        // Récupère les participations d'un match donné
         $matchId = $_GET['matchId'] ?? null;
 
         if (!$matchId) {
@@ -35,8 +41,8 @@ switch ($http_method) {
         break;
 
     case 'POST':
-    case 'PUT': // same logic for update
-
+    case 'PUT': // Même logique pour création et mise à jour
+        // Lecture des données JSON envoyées
         $data = json_decode(file_get_contents("php://input"), true);
 
         if (!$data) {
@@ -48,37 +54,39 @@ switch ($http_method) {
         $titulaires = $data['titulaires'] ?? [];
         $remplacants = $data['remplacants'] ?? [];
 
+        // Validation minimale : matchId et au moins 11 titulaires
         if (!$matchId || count($titulaires) < 11) {
             deliver_response(400, "Bad Request", "matchId et au moins 11 titulaires requis.");
             exit();
         }
 
         try {
-            // reset (this is why PUT makes sense)
+            // Réinitialisation des participations existantes pour ce match
             $participerDao->supprimerParMatch((int)$matchId);
 
-            // titulaires
+            // Ajout des titulaires
             foreach ($titulaires as $joueur) {
                 $participerDao->ajouterParticipation(
                     $joueur['id'],
                     $matchId,
                     $joueur['poste'],
-                    true,
+                    true, // titulaire
                     $joueur['note'] ?? null
                 );
             }
 
-            // remplacants
+            // Ajout des remplaçants
             foreach ($remplacants as $joueur) {
                 $participerDao->ajouterParticipation(
                     $joueur['id'],
                     $matchId,
                     $joueur['poste'],
-                    false,
+                    false, // remplaçant
                     $joueur['note'] ?? null
                 );
             }
 
+            // Réponse HTTP selon la méthode
             deliver_response(
                 $http_method === 'POST' ? 201 : 200,
                 "OK",
@@ -92,7 +100,7 @@ switch ($http_method) {
         break;
 
     case 'DELETE':
-
+        // Suppression d'une feuille de match
         $matchId = $_GET['matchId'] ?? null;
 
         if (!$matchId) {
@@ -110,5 +118,6 @@ switch ($http_method) {
         break;
 
     default:
+        // Méthode HTTP non supportée
         deliver_response(405, "Method Not Allowed", "Méthode non autorisée.");
 }

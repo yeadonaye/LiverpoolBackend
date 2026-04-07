@@ -1,14 +1,10 @@
 <?php
-// auth.php lives in Modele/DAO
+// auth.php se trouve dans Modele/DAO
+
+// Inclusion du fichier contenant la logique d'authentification et génération de JWT
 require_once __DIR__ . '/../Modele/DAO/authapi.php';
-/*
-if (is_jwt_valid($jwt, $secret)) {
-    header('Location: /index.php');
-    exit;
-}
-*/
 
+// Appel de la fonction de connexion qui traite la requête POST et retourne une erreur éventuelle
 $error = seConnecter();
-
 
 ?>

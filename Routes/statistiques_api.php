@@ -9,16 +9,16 @@ header('Content-Type: application/json');
 $headers = getallheaders();
 $jwt = isset($headers['Authorization']) ? str_replace('Bearer ', '', $headers['Authorization']) : null;
 
-
-// Vérifier le token via l'API d'auth et récupérer le rôle
+// Vérifie le token JWT et récupère le rôle
 $payload = check_auth($jwt);
-// Seuls les coachs et joueurs peuvent accéder aux statistiques
+
+// Autorisation : seuls les coachs et joueurs peuvent accéder aux statistiques
 if (!in_array($payload['role'] ?? '', ['coach', 'joueur'])) {
     deliver_response(403, "Forbidden", "Vous n'avez pas les permissions nécessaires pour accéder à ces statistiques.");
     exit();
 }
 
-// Permettre que la recupération (GET) de données et non pas l'ajout(POST) ou la modification(PUT)
+// Autorise uniquement les requêtes GET pour récupérer les statistiques
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     http_response_code(405);
     echo json_encode([
@@ -31,7 +31,7 @@ try {
     $joueurDao = new JoueurDao($linkpdo);
     $matchDao = new MatchDao($linkpdo);
 
-    // Collect statistics (same as your statistiques code)
+    // Récupération des statistiques globales des matchs et des joueurs
     $matchStats = $matchDao->getGlobalStats();
     $totalJoueurs = $joueurDao->compterTotalJoueurs();
     $totalMatchs = $matchStats['total'] ?? 0;
@@ -41,13 +41,14 @@ try {
     $totalButs = $matchStats['buts'] ?? 0;
     $butsEncaisses = $matchStats['butsEncaisses'] ?? 0;
 
+    // Calculs dérivés pour l'affichage
     $tauxVictoire = $totalMatchs > 0 ? round(($victoires / $totalMatchs) * 100, 1) : 0;
     $differenceButs = $totalButs - $butsEncaisses;
     $differenceButsDisplay = ($differenceButs >= 0 ? '+' : '') . $differenceButs;
     $progressEncaissesPct = $totalButs > 0 ? ($butsEncaisses / ($totalButs + 1)) * 100 : 0;
     $butsMoyenneParMatch = $totalMatchs > 0 ? number_format($totalButs / $totalMatchs, 1, ',', '') : '0';
 
-    // Players
+    // Préparation des statistiques détaillées pour chaque joueur
     $players = [];
     $joueurs = $joueurDao->getTousAvecStatistiques();
     $matchesOrdered = $matchDao->getMatchesOrderedByDate();
@@ -67,6 +68,7 @@ try {
         ];
     }
 
+    // Renvoie les statistiques globales et par joueur en JSON
     echo json_encode([
         'error' => '',
         'stats' => [
@@ -86,6 +88,7 @@ try {
     ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 
 } catch (Exception $e) {
+    // Gestion globale des erreurs si les statistiques ne peuvent pas être récupérées
     http_response_code(500);
     echo json_encode(['error' => 'Erreur lors du chargement des statistiques: ' . $e->getMessage()]);
 }

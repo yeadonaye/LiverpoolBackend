@@ -1,24 +1,28 @@
 <?php
 
+// Inclusion des fichiers DAO et classe Match
 require_once __DIR__ . '/../../Modele/DAO/MatchDao.php';
 require_once __DIR__ . '/../../Modele/Match.php';
 require_once __DIR__ . "/../../Modele/DAO/connexionBD.php";
 
+// Initialisation du DAO des matchs
 $matchDao = new MatchDao($linkpdo);
 $error   = '';
 $success = '';
 
+// Vérification de l'ID du match
 if (!$id) {
     $error = 'Aucun match spécifié';
 } else {
     try {
+        // Récupération du match depuis la base
         $matchObj = $matchDao->getById((int)$id);
 
         if (!$matchObj) {
             $error = 'Match non trouvé';
         } else {
 
-            // GET — retourner les infos du match pour pré-remplir le formulaire
+            // GET — renvoyer les informations pour pré-remplir le formulaire
             if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 $success = [
                     'Id_Match'           => $matchObj->getIdMatch(),
@@ -31,9 +35,10 @@ if (!$id) {
                     'Score_Nous'         => $matchObj->getScoreNous(),
                 ];
 
-            // PUT — modifier le match
+            // POST/PUT — modification du match
             } elseif (in_array($_SERVER['REQUEST_METHOD'], ['PUT', 'POST'])) {
 
+                // Récupération des données envoyées
                 $nomEquipeAdverse = $data->Nom_Equipe_Adverse ?? '';
                 $dateRencontre    = $data->Date_Rencontre     ?? '';
                 $heure            = $data->Heure              ?? '';
@@ -42,15 +47,16 @@ if (!$id) {
                 $scoreNous        = $data->Score_Nous         ?? '';
                 $scoreAdverse     = $data->Score_Adversaire   ?? '';
 
+                // Vérification des champs obligatoires
                 if (empty($nomEquipeAdverse) || empty($dateRencontre) || empty($heure)) {
                     $error = 'Les champs avec * sont obligatoires';
                 } else {
                     try {
+                        // Conversion des scores en entier
                         $scoreNousInt    = ($scoreNous    !== '') ? (int)$scoreNous    : 0;
                         $scoreAdverseInt = ($scoreAdverse !== '') ? (int)$scoreAdverse : 0;
 
-                        $resultat = $data->Resultat ?? '';
-
+                        // Création de l'objet Match avec les nouvelles valeurs
                         $matchObj = new Match_(
                             (int)$id,
                             $dateRencontre,
@@ -61,6 +67,8 @@ if (!$id) {
                             $scoreAdverseInt,
                             $scoreNousInt
                         );
+
+                        // Mise à jour dans la base
                         $matchDao->update($matchObj);
                         $success = 'Match modifié avec succès!';
 
